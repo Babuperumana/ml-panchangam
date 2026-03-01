@@ -1,0 +1,777 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --gold: #D4A017;
+  --gold-light: #F0D060;
+  --maroon: #800020;
+  --maroon-dark: #5C0015;
+  --green-dark: #1B5E20;
+  --green: #2E7D32;
+  --cream: #FFF8E7;
+  --cream-dark: #F5E6C8;
+  --text-dark: #2C1810;
+  --text-light: #FFF8E7;
+  --shadow: 0 4px 20px rgba(0,0,0,0.15);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: 'Noto Sans Malayalam', 'Playfair Display', serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before,
+.header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 20px, transparent 20px, transparent 30px);
+}
+
+.header::before { top: 0; left: 0; }
+.header::after { bottom: 0; top: auto; left: 0; }
+
+.header h1 {
+  font-size: 2.5rem;
+  color: var(--gold-light);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  margin-bottom: 0.25rem;
+  letter-spacing: 2px;
+}
+
+.header .subtitle {
+  color: var(--cream);
+  font-size: 1rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+/* Border ornament */
+.ornament-border {
+  height: 6px;
+  background: linear-gradient(90deg, var(--maroon), var(--gold), var(--maroon), var(--gold), var(--maroon));
+}
+
+/* Date Picker */
+.date-picker-section {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: var(--cream-dark);
+  border-bottom: 2px solid var(--gold);
+}
+
+.date-picker-section label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--maroon-dark);
+  margin-right: 0.5rem;
+}
+
+.date-input {
+  font-family: 'Noto Sans Malayalam', serif;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  background: white;
+  color: var(--text-dark);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.date-input:focus {
+  border-color: var(--maroon);
+}
+
+.nav-btns {
+  display: inline-flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.nav-btn {
+  font-family: 'Noto Sans Malayalam', serif;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  background: var(--green-dark);
+  color: var(--gold-light);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-btn:hover {
+  background: var(--maroon);
+  border-color: var(--gold-light);
+}
+
+/* Main Content */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Top Summary Card */
+.summary-card {
+  background: linear-gradient(135deg, var(--maroon-dark), var(--maroon));
+  border-radius: 16px;
+  padding: 2rem;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.summary-card .gregorian-date {
+  font-size: 1rem;
+  opacity: 0.85;
+  margin-bottom: 0.25rem;
+}
+
+.summary-card .ml-day {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 0.25rem;
+}
+
+.summary-card .kv-date {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.summary-card .nakshathram-highlight {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  padding: 0.4rem 1.5rem;
+  border-radius: 25px;
+  border: 1px solid var(--gold);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.summary-card .nakshathram-highlight .ml {
+  color: var(--gold-light);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+/* Nakshatram Details Card */
+.nakshatram-detail-card {
+  grid-column: span 2;
+}
+
+.nak-detail-row {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--cream-dark);
+}
+
+.nak-detail-row:last-child {
+  border-bottom: none;
+}
+
+.nak-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--maroon-dark);
+}
+
+.nak-en {
+  font-size: 0.85rem;
+  color: #888;
+  margin-left: 0.3rem;
+}
+
+.nak-time {
+  font-size: 0.95rem;
+  color: var(--green-dark);
+  margin-top: 0.2rem;
+  font-weight: 600;
+}
+
+.nak-less-card {
+  border-top-color: #E65100;
+  background: #FFF3E0;
+}
+
+.nak-less-card .card-value-ml.nak-less {
+  color: #E65100;
+}
+
+.nak-less-highlight {
+  background: rgba(230, 81, 0, 0.2) !important;
+  border-color: #E65100 !important;
+}
+
+.card-note {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.6rem;
+  line-height: 1.5;
+  border-top: 1px solid var(--cream-dark);
+  padding-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Vishesham Card */
+.vishesham-card {
+  border-top-color: #FF6F00 !important;
+  background: linear-gradient(135deg, #FFF8E1, #FFF3E0);
+}
+
+.vishesham-item {
+  display: inline-block;
+  background: var(--maroon);
+  color: var(--gold-light);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0.25rem 0.2rem;
+}
+
+/* Timings Card */
+.timings-card {
+  border-top-color: var(--green-dark) !important;
+}
+
+.timing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--cream-dark);
+}
+
+.timing-row:last-child {
+  border-bottom: none;
+}
+
+.timing-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--maroon-dark);
+}
+
+.timing-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+/* Grid Cards */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border-top: 4px solid var(--gold);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--green-dark);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.card-value-ml {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--maroon-dark);
+  margin-bottom: 0.15rem;
+}
+
+.card-value-en {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Sun times special card */
+.sun-card {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  grid-column: span 2;
+}
+
+.sun-item {
+  text-align: center;
+}
+
+.sun-item .icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.sun-item .time {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--maroon);
+}
+
+.sun-item .label {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.2rem;
+}
+
+.divider {
+  width: 1px;
+  height: 60px;
+  background: var(--cream-dark);
+}
+
+/* Calendar Toggle Button */
+.cal-toggle-btn {
+  background: var(--maroon) !important;
+  border-color: var(--gold-light) !important;
+}
+
+/* Monthly Calendar */
+.calendar-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-header h2 {
+  font-size: 1.5rem;
+  color: var(--maroon-dark);
+  text-align: center;
+}
+
+.calendar-header .cal-nav-btn {
+  font-family: 'Noto Sans Malayalam', serif;
+  padding: 0.4rem 1rem;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  background: var(--green-dark);
+  color: var(--gold-light);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.calendar-header .cal-nav-btn:hover {
+  background: var(--maroon);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-weekday-header {
+  background: var(--green-dark);
+  color: var(--gold-light);
+  text-align: center;
+  padding: 0.5rem 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 6px 6px 0 0;
+}
+
+.cal-cell {
+  background: white;
+  border: 1px solid var(--cream-dark);
+  border-radius: 8px;
+  padding: 0.4rem;
+  min-height: 90px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--gold);
+}
+
+.cal-cell.cal-today {
+  border: 2px solid var(--maroon);
+  background: #FFF8E7;
+  box-shadow: 0 0 8px rgba(128, 0, 32, 0.2);
+}
+
+.cal-cell.cal-nak-less {
+  background: #FFF3E0;
+  border-color: #E65100;
+}
+
+.cal-cell.cal-empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+  min-height: 0;
+}
+
+.cal-cell.cal-empty:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.cal-greg-date {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--maroon-dark);
+  line-height: 1;
+}
+
+.cal-cell.cal-sunday .cal-greg-date {
+  color: #C62828;
+}
+
+.cal-cell.cal-vishesham {
+  background: #FFF8E1;
+}
+
+.cal-vishesham-tag {
+  font-size: 0.55rem;
+  color: #E65100;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.cal-kv-date {
+  font-size: 0.65rem;
+  color: var(--green-dark);
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+.cal-nak {
+  font-size: 0.7rem;
+  color: var(--maroon);
+  font-weight: 600;
+  margin-top: auto;
+  padding-top: 3px;
+  border-top: 1px solid var(--cream-dark);
+  line-height: 1.2;
+}
+
+.cal-cell.cal-nak-less .cal-nak {
+  color: #E65100;
+  font-style: italic;
+}
+
+.back-to-daily {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.back-to-daily button {
+  font-family: 'Noto Sans Malayalam', serif;
+  padding: 0.5rem 1.5rem;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  background: var(--maroon);
+  color: var(--gold-light);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back-to-daily button:hover {
+  background: var(--green-dark);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--green-dark);
+  color: var(--cream);
+  font-size: 0.85rem;
+  margin-top: 2rem;
+  opacity: 0.9;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: var(--maroon);
+}
+
+.loading .spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--cream-dark);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 600px) {
+  .header {
+    padding: 1rem 0.75rem;
+  }
+  .header h1 {
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+  }
+  .header .subtitle {
+    font-size: 0.85rem;
+  }
+
+  /* Date picker stacked layout */
+  .date-picker-section {
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .date-picker-section label {
+    font-size: 0.95rem;
+    margin-right: 0;
+  }
+  .date-input {
+    width: 100%;
+    max-width: 280px;
+    font-size: 1rem;
+    padding: 0.6rem 0.75rem;
+  }
+  .nav-btns {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 0;
+    margin-top: 0;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+  }
+  .nav-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    min-height: 44px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Container */
+  .container {
+    padding: 1rem 0.75rem;
+  }
+
+  /* Summary card */
+  .summary-card {
+    padding: 1.25rem 1rem;
+    margin-bottom: 1.25rem;
+    border-radius: 12px;
+  }
+  .summary-card .ml-day {
+    font-size: 1.5rem;
+  }
+  .summary-card .kv-date {
+    font-size: 1.05rem;
+  }
+  .summary-card .nakshathram-highlight {
+    font-size: 0.95rem;
+    padding: 0.35rem 1rem;
+  }
+  .summary-card .nakshathram-highlight .ml {
+    font-size: 1.1rem;
+  }
+
+  /* Cards grid single column */
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .card {
+    padding: 1.1rem;
+    border-radius: 10px;
+  }
+  .card-value-ml {
+    font-size: 1.3rem;
+  }
+
+  /* Sun card stays horizontal */
+  .sun-card {
+    grid-column: span 1;
+  }
+  .sun-item .icon {
+    font-size: 2rem;
+  }
+  .sun-item .time {
+    font-size: 1.4rem;
+  }
+  .sun-item .label {
+    font-size: 0.75rem;
+  }
+  .divider {
+    height: 45px;
+  }
+
+  /* Nakshatram detail card full width */
+  .nakshatram-detail-card {
+    grid-column: span 1;
+  }
+
+  /* Vishesham items */
+  .vishesham-item {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.65rem;
+  }
+
+  /* Card note */
+  .card-note {
+    font-size: 0.7rem;
+  }
+
+  /* Calendar */
+  .calendar-container {
+    padding: 1rem 0.4rem;
+  }
+  .calendar-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .calendar-header h2 {
+    font-size: 1rem;
+    width: 100%;
+    order: -1;
+  }
+  .calendar-header .cal-nav-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    min-height: 44px;
+  }
+  .calendar-grid {
+    gap: 2px;
+  }
+  .cal-weekday-header {
+    font-size: 0.65rem;
+    padding: 0.4rem 0.1rem;
+  }
+  .cal-cell {
+    min-height: 62px;
+    padding: 0.2rem;
+    border-radius: 6px;
+  }
+  .cal-greg-date {
+    font-size: 0.9rem;
+  }
+  .cal-kv-date {
+    font-size: 0.5rem;
+  }
+  .cal-nak {
+    font-size: 0.5rem;
+    padding-top: 2px;
+  }
+  .cal-vishesham-tag {
+    font-size: 0.45rem;
+  }
+  .back-to-daily button {
+    font-size: 0.9rem;
+    min-height: 44px;
+  }
+
+  /* Footer */
+  .footer {
+    font-size: 0.75rem;
+    padding: 1rem;
+    margin-top: 1.25rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .header h1 {
+    font-size: 1.3rem;
+  }
+  .nav-btn {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.5rem;
+  }
+  .summary-card .ml-day {
+    font-size: 1.3rem;
+  }
+  .summary-card .kv-date {
+    font-size: 0.95rem;
+  }
+  .cal-cell {
+    min-height: 55px;
+  }
+  .cal-greg-date {
+    font-size: 0.8rem;
+  }
+  .cal-nak {
+    font-size: 0.45rem;
+  }
+}
