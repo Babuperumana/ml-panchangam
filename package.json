@@ -1,16 +1,49 @@
 {
   "name": "ml-panchangam",
   "version": "1.0.0",
-  "description": "",
+  "description": "Malayalam Panchangam - Accurate Hindu calendar with nakshathram, tithi, kollavarsham, sunrise/sunset, festivals & more. Pure JavaScript astronomical engine based on NASA/Moshier ephemeris.",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "panchangam",
+    "malayalam",
+    "kerala",
+    "hindu-calendar",
+    "kollavarsham",
+    "nakshathram",
+    "nakshatra",
+    "tithi",
+    "panchang",
+    "jyotish",
+    "astronomy",
+    "sunrise",
+    "sunset",
+    "vishu",
+    "onam",
+    "rashi",
+    "yoga",
+    "karana",
+    "ayanamsa",
+    "ephemeris"
+  ],
+  "author": "Babu Perumana",
+  "license": "MIT",
   "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Babuperumana/ml-panchangam.git"
+  },
+  "files": [
+    "index.js",
+    "src/",
+    "public/",
+    "server.js",
+    "README.md",
+    "Screenshot.jpg"
+  ],
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1"

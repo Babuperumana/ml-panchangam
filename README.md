@@ -1,5 +1,7 @@
 # Malayalam Panchangam (മലയാളം പഞ്ചാംഗം)
 
+![Malayalam Panchangam Screenshot](Screenshot.jpg)
+
 A fully standalone Malayalam Panchangam (Hindu calendar) web application with accurate astronomical calculations based on NASA/Moshier ephemeris algorithms. No external astronomical APIs or heavy calendar libraries required — all calculations are done in pure JavaScript.
 
 **Default Location:** Kerala, India (11.07°N, 76.28°E)
