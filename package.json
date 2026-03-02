@@ -1,6 +1,6 @@
 {
   "name": "ml-panchangam",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Malayalam Panchangam - Accurate Hindu calendar with nakshathram, tithi, kollavarsham, sunrise/sunset, festivals & more. Pure JavaScript astronomical engine based on NASA/Moshier ephemeris.",
   "main": "index.js",
   "scripts": {
