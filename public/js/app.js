@@ -4,13 +4,14 @@ const prevBtn = document.getElementById('prevDay');
 const nextBtn = document.getElementById('nextDay');
 const todayBtn = document.getElementById('today');
 const calToggle = document.getElementById('calToggle');
+const toolsToggle = document.getElementById('toolsToggle');
 
 function formatDate(d) {
   return d.toISOString().split('T')[0];
 }
 
 let currentDate = new Date();
-let isCalendarView = false;
+let currentView = 'daily'; // 'daily' | 'calendar' | 'tools'
 let calYear = currentDate.getFullYear();
 let calMonth = currentDate.getMonth() + 1;
 datePicker.value = formatDate(currentDate);
@@ -255,7 +256,7 @@ function changeMonth(delta) {
 }
 
 function switchToDay(dateStr) {
-  isCalendarView = false;
+  currentView = 'daily';
   calToggle.textContent = '📅 മാസം';
   currentDate = new Date(dateStr + 'T12:00:00');
   datePicker.value = dateStr;
@@ -263,7 +264,7 @@ function switchToDay(dateStr) {
 }
 
 function switchToDailyView() {
-  isCalendarView = false;
+  currentView = 'daily';
   calToggle.textContent = '📅 മാസം';
   fetchPanchangam(formatDate(currentDate));
 }
@@ -293,17 +294,206 @@ todayBtn.addEventListener('click', () => {
 });
 
 calToggle.addEventListener('click', () => {
-  isCalendarView = !isCalendarView;
-  if (isCalendarView) {
+  if (currentView === 'calendar') {
+    currentView = 'daily';
+    calToggle.textContent = '📅 മാസം';
+    fetchPanchangam(formatDate(currentDate));
+  } else {
+    currentView = 'calendar';
     calToggle.textContent = '📋 ദിവസം';
     calYear = currentDate.getFullYear();
     calMonth = currentDate.getMonth() + 1;
     fetchMonthCalendar(calYear, calMonth);
-  } else {
-    calToggle.textContent = '📅 മാസം';
-    fetchPanchangam(formatDate(currentDate));
   }
 });
+
+toolsToggle.addEventListener('click', () => {
+  if (currentView === 'tools') {
+    currentView = 'daily';
+    fetchPanchangam(formatDate(currentDate));
+  } else {
+    currentView = 'tools';
+    renderToolsView();
+  }
+});
+
+// === Tools View ===
+
+const KV_MONTHS_ML = ['മേടം', 'ഇടവം', 'മിഥുനം', 'കർക്കടകം', 'ചിങ്ങം', 'കന്നി', 'തുലാം', 'വൃശ്ചികം', 'ധനു', 'മകരം', 'കുംഭം', 'മീനം'];
+
+async function renderToolsView() {
+  // Fetch nakshatra list
+  let nakshatras = [];
+  try {
+    const res = await fetch('/api/tools/nakshatras');
+    nakshatras = await res.json();
+  } catch (e) {}
+
+  const nakOptions = nakshatras.map(n => `<option value="${n}">${n}</option>`).join('');
+  const kvMonthOptions = KV_MONTHS_ML.map(m => `<option value="${m}">${m}</option>`).join('');
+
+  content.innerHTML = `
+    <div class="tools-container">
+      <div class="back-to-daily">
+        <button onclick="switchToDailyView()">← ദിവസ വിവരങ്ങൾ / Daily View</button>
+      </div>
+
+      <!-- Tool 1: Nakshathram Finder -->
+      <div class="tool-card">
+        <div class="tool-header">⭐ നക്ഷത്ര തീയതി കണ്ടെത്തൽ / Nakshathram Date Finder</div>
+        <div class="tool-form">
+          <div class="tool-row">
+            <label>നക്ഷത്രം</label>
+            <select id="toolNakName">${nakOptions}</select>
+          </div>
+          <div class="tool-row">
+            <label>എണ്ണം (1-12)</label>
+            <select id="toolNakCount">
+              ${[1,2,3,4,5,6,7,8,9,10,11,12].map(n => `<option value="${n}" ${n===5?'selected':''}>${n}</option>`).join('')}
+            </select>
+          </div>
+          <button class="tool-btn" onclick="searchNakshatra()">🔍 തിരയുക</button>
+        </div>
+        <div id="nakResult" class="tool-result"></div>
+      </div>
+
+      <!-- Tool 2: Kollavarsham to Gregorian -->
+      <div class="tool-card">
+        <div class="tool-header">📅 കൊല്ലവർഷം → ഗ്രിഗോറിയൻ / Kollavarsham to Gregorian</div>
+        <div class="tool-form">
+          <div class="tool-row">
+            <label>വർഷം</label>
+            <input type="number" id="toolKvYear" value="1201" min="1100" max="1300">
+          </div>
+          <div class="tool-row">
+            <label>മാസം</label>
+            <select id="toolKvMonth">${kvMonthOptions}</select>
+          </div>
+          <div class="tool-row">
+            <label>തീയതി</label>
+            <input type="number" id="toolKvDay" value="1" min="1" max="32">
+          </div>
+          <button class="tool-btn" onclick="convertKvDate()">🔄 മാറ്റുക</button>
+        </div>
+        <div id="kvResult" class="tool-result"></div>
+      </div>
+
+      <!-- Tool 3: Upcoming Events -->
+      <div class="tool-card">
+        <div class="tool-header">🪔 വരാനിരിക്കുന്ന വിശേഷദിവസങ്ങൾ / Upcoming Events</div>
+        <div class="tool-form">
+          <div class="tool-row">
+            <label>എണ്ണം</label>
+            <select id="toolEventCount">
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+          <div class="tool-row">
+            <label>തിരയുക</label>
+            <input type="text" id="toolEventSearch" placeholder="ഉദാ: വിഷു, ഓണം...">
+          </div>
+          <button class="tool-btn" onclick="searchEvents()">🔍 തിരയുക</button>
+        </div>
+        <div id="eventResult" class="tool-result"></div>
+      </div>
+    </div>`;
+}
+
+async function searchNakshatra() {
+  const name = document.getElementById('toolNakName').value;
+  const count = document.getElementById('toolNakCount').value;
+  const resultDiv = document.getElementById('nakResult');
+  resultDiv.innerHTML = '<div class="tool-loading">തിരയുന്നു...</div>';
+
+  try {
+    const res = await fetch(`/api/tools/next-nakshatra?name=${encodeURIComponent(name)}&count=${count}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    if (!data.length) {
+      resultDiv.innerHTML = '<div class="tool-empty">ഫലം കണ്ടെത്തിയില്ല</div>';
+      return;
+    }
+    resultDiv.innerHTML = `
+      <table class="tool-table">
+        <thead><tr>
+          <th>#</th>
+          <th>തീയതി / Date</th>
+          <th>ആഴ്ച / Day</th>
+          <th>കൊല്ലവർഷം</th>
+        </tr></thead>
+        <tbody>
+          ${data.map((d, i) => `<tr>
+            <td>${i + 1}</td>
+            <td>${d.date}</td>
+            <td>${d.weekday.ml} / ${d.weekday.en}</td>
+            <td>${d.kollavarsham.monthMl} ${d.kollavarsham.day}, ${d.kollavarsham.year}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+  } catch (err) {
+    resultDiv.innerHTML = `<div class="tool-error">പിശക്: ${err.message}</div>`;
+  }
+}
+
+async function convertKvDate() {
+  const year = document.getElementById('toolKvYear').value;
+  const month = document.getElementById('toolKvMonth').value;
+  const day = document.getElementById('toolKvDay').value;
+  const resultDiv = document.getElementById('kvResult');
+  resultDiv.innerHTML = '<div class="tool-loading">മാറ്റുന്നു...</div>';
+
+  try {
+    const res = await fetch(`/api/tools/kv-to-gregorian?year=${year}&month=${encodeURIComponent(month)}&day=${day}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    resultDiv.innerHTML = `
+      <div class="tool-converted">
+        <div class="tool-converted-label">ഗ്രിഗോറിയൻ തീയതി / Gregorian Date</div>
+        <div class="tool-converted-value">${data.gregorianDate}</div>
+        <div class="tool-converted-day">${data.weekday.ml} / ${data.weekday.en}</div>
+      </div>`;
+  } catch (err) {
+    resultDiv.innerHTML = `<div class="tool-error">പിശക്: ${err.message}</div>`;
+  }
+}
+
+async function searchEvents() {
+  const count = document.getElementById('toolEventCount').value;
+  const search = document.getElementById('toolEventSearch').value;
+  const resultDiv = document.getElementById('eventResult');
+  resultDiv.innerHTML = '<div class="tool-loading">തിരയുന്നു...</div>';
+
+  try {
+    const res = await fetch(`/api/tools/upcoming-events?count=${count}&search=${encodeURIComponent(search)}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    if (!data.length) {
+      resultDiv.innerHTML = '<div class="tool-empty">ഫലം കണ്ടെത്തിയില്ല</div>';
+      return;
+    }
+    resultDiv.innerHTML = `
+      <table class="tool-table">
+        <thead><tr>
+          <th>തീയതി / Date</th>
+          <th>ആഴ്ച / Day</th>
+          <th>വിശേഷം / Event</th>
+          <th>കൊല്ലവർഷം</th>
+        </tr></thead>
+        <tbody>
+          ${data.map(d => `<tr>
+            <td>${d.date}</td>
+            <td>${d.weekday.ml}</td>
+            <td class="tool-event-name">${d.event}</td>
+            <td>${d.kollavarsham.monthMl} ${d.kollavarsham.day}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+  } catch (err) {
+    resultDiv.innerHTML = `<div class="tool-error">പിശക്: ${err.message}</div>`;
+  }
+}
 
 // Initial load
 fetchPanchangam(formatDate(currentDate));

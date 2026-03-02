@@ -143,4 +143,74 @@ function getPanchangam(dateStr, lat = 11.074462304803008, lng = 76.2824402223553
   };
 }
 
-module.exports = { getPanchangam };
+// === Tool Functions ===
+
+function getNextNakshatraDates(nakName, count = 1, lat = 11.074462304803008, lng = 76.28244022235538) {
+  const results = [];
+  let startDate = new Date();
+  startDate.setHours(12, 0, 0, 0);
+  for (let i = 0; i < count; i++) {
+    // Manual search with includes() to handle compound names like "അശ്വതി & ഭരണി"
+    let found = null;
+    let curr = new Date(startDate);
+    for (let d = 0; d < 40; d++) {
+      const res = panchang.calculate(curr, { lat, lon: lng });
+      if (res.Nakshatra.name.includes(nakName)) {
+        found = { date: new Date(curr), details: res };
+        break;
+      }
+      curr.setDate(curr.getDate() + 1);
+    }
+    if (!found) break;
+    const dateStr = found.date.toISOString().split('T')[0];
+    const p = getPanchangam(dateStr, lat, lng);
+    results.push({
+      date: dateStr,
+      weekday: { en: p.weekday.en, ml: p.weekday.ml },
+      kollavarsham: p.kollavarsham,
+      nakshathram: p.nakshathram
+    });
+    startDate = new Date(found.date);
+    startDate.setDate(startDate.getDate() + 1);
+  }
+  return results;
+}
+
+function convertKvToGregorian(year, monthStr, day) {
+  const result = panchang.kollamToGregorian(year, monthStr, day);
+  if (!result) return null;
+  const dateStr = result.toISOString().split('T')[0];
+  const d = new Date(dateStr + 'T12:00:00');
+  const dayNameEn = WEEKDAY_NAMES[d.getDay()];
+  return {
+    gregorianDate: dateStr,
+    weekday: { en: dayNameEn, ml: WEEKDAY_ML[dayNameEn] }
+  };
+}
+
+function getUpcomingEvents(count = 5, search = '') {
+  const events = panchang.findUpcomingEvents(new Date(), count * 3);
+  let filtered = events;
+  if (search) {
+    filtered = events.filter(e => e.name.includes(search));
+  }
+  return filtered.slice(0, count).map(e => {
+    const dateStr = e.date.toISOString().split('T')[0];
+    const d = new Date(dateStr + 'T12:00:00');
+    const dayNameEn = WEEKDAY_NAMES[d.getDay()];
+    const p = panchang.getMalayalamDateFast(d, 11.074462304803008, 76.28244022235538);
+    const kvMonthEn = lookup(KV_MONTH_ML, KV_MONTH_EN, p.month);
+    return {
+      date: dateStr,
+      weekday: { en: dayNameEn, ml: WEEKDAY_ML[dayNameEn] },
+      kollavarsham: { year: p.year, month: kvMonthEn, monthMl: lookup(KV_MONTH_EN, KV_MONTH_ML, p.month), day: p.date },
+      event: e.name
+    };
+  });
+}
+
+function getAllNakshatras() {
+  return panchang.getNakshatras();
+}
+
+module.exports = { getPanchangam, getNextNakshatraDates, convertKvToGregorian, getUpcomingEvents, getAllNakshatras };

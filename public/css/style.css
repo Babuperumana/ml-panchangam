@@ -375,10 +375,184 @@ body {
   background: var(--cream-dark);
 }
 
-/* Calendar Toggle Button */
+/* Toggle Buttons */
 .cal-toggle-btn {
   background: var(--maroon) !important;
   border-color: var(--gold-light) !important;
+}
+.tools-toggle-btn {
+  background: var(--green) !important;
+  border-color: var(--gold-light) !important;
+}
+
+/* === Tools View === */
+.tools-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.tool-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  border-top: 4px solid var(--gold);
+}
+
+.tool-header {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--maroon-dark);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--cream-dark);
+}
+
+.tool-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.tool-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 120px;
+}
+
+.tool-row label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tool-row select,
+.tool-row input {
+  font-family: 'Noto Sans Malayalam', serif;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.6rem;
+  border: 2px solid var(--cream-dark);
+  border-radius: 8px;
+  background: white;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.tool-row select:focus,
+.tool-row input:focus {
+  border-color: var(--gold);
+}
+
+.tool-btn {
+  font-family: 'Noto Sans Malayalam', serif;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  background: var(--maroon);
+  color: var(--gold-light);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: 44px;
+}
+
+.tool-btn:hover {
+  background: var(--green-dark);
+}
+
+.tool-result {
+  margin-top: 1rem;
+}
+
+.tool-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tool-table thead {
+  background: var(--green-dark);
+  color: var(--gold-light);
+}
+
+.tool-table th {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tool-table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--cream-dark);
+}
+
+.tool-table tbody tr:hover {
+  background: var(--cream);
+}
+
+.tool-event-name {
+  font-weight: 700;
+  color: var(--maroon-dark);
+}
+
+.tool-converted {
+  text-align: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--cream), var(--cream-dark));
+  border-radius: 10px;
+}
+
+.tool-converted-label {
+  font-size: 0.8rem;
+  color: var(--green-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.tool-converted-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--maroon-dark);
+}
+
+.tool-converted-day {
+  font-size: 1rem;
+  color: var(--green-dark);
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.tool-loading {
+  text-align: center;
+  padding: 1rem;
+  color: var(--maroon);
+  font-style: italic;
+}
+
+.tool-empty {
+  text-align: center;
+  padding: 1rem;
+  color: #888;
+  font-style: italic;
+}
+
+.tool-error {
+  text-align: center;
+  padding: 1rem;
+  color: #C62828;
+  font-weight: 600;
 }
 
 /* Monthly Calendar */
@@ -549,6 +723,21 @@ body {
   font-size: 0.85rem;
   margin-top: 2rem;
   opacity: 0.9;
+}
+
+.footer-credits {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.footer-credits a {
+  color: var(--gold-light);
+  text-decoration: none;
+}
+
+.footer-credits a:hover {
+  text-decoration: underline;
 }
 
 /* Loading */
@@ -747,6 +936,36 @@ body {
     font-size: 0.75rem;
     padding: 1rem;
     margin-top: 1.25rem;
+  }
+
+  /* Tools */
+  .tools-container {
+    padding: 1rem 0.5rem;
+  }
+  .tool-card {
+    padding: 1rem;
+  }
+  .tool-header {
+    font-size: 0.95rem;
+  }
+  .tool-form {
+    flex-direction: column;
+  }
+  .tool-row {
+    min-width: 100%;
+  }
+  .tool-btn {
+    width: 100%;
+  }
+  .tool-table {
+    font-size: 0.75rem;
+  }
+  .tool-table th,
+  .tool-table td {
+    padding: 0.4rem 0.3rem;
+  }
+  .tool-converted-value {
+    font-size: 1.4rem;
   }
 }
 

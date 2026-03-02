@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { getPanchangam } = require('./src/panchangam');
+const { getPanchangam, getNextNakshatraDates, convertKvToGregorian, getUpcomingEvents, getAllNakshatras } = require('./src/panchangam');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -57,6 +57,53 @@ app.get('/api/panchangam/month', (req, res) => {
   } catch (err) {
     console.error('Month API error:', err);
     res.status(500).json({ error: 'Failed to calculate month data', details: err.message });
+  }
+});
+
+// === Tools API ===
+
+app.get('/api/tools/nakshatras', (req, res) => {
+  try {
+    res.json(getAllNakshatras());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/tools/next-nakshatra', (req, res) => {
+  try {
+    const { name, count } = req.query;
+    if (!name) return res.status(400).json({ error: 'name parameter required' });
+    const results = getNextNakshatraDates(name, parseInt(count) || 1);
+    res.json(results);
+  } catch (err) {
+    console.error('Next nakshatra error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/tools/kv-to-gregorian', (req, res) => {
+  try {
+    const { year, month, day } = req.query;
+    if (!year || !month || !day) return res.status(400).json({ error: 'year, month, day required' });
+    const result = convertKvToGregorian(parseInt(year), month, parseInt(day));
+    if (!result) return res.status(404).json({ error: 'Could not convert date' });
+    res.json(result);
+  } catch (err) {
+    console.error('KV conversion error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/tools/upcoming-events', (req, res) => {
+  try {
+    const count = parseInt(req.query.count) || 5;
+    const search = req.query.search || '';
+    const results = getUpcomingEvents(count, search);
+    res.json(results);
+  } catch (err) {
+    console.error('Upcoming events error:', err);
+    res.status(500).json({ error: err.message });
   }
 });
 
