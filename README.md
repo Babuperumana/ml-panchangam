@@ -1,10 +1,18 @@
 # Malayalam Panchangam (മലയാളം പഞ്ചാംഗം)
 
-![Malayalam Panchangam Screenshot](Screenshot.jpg)
-
 A fully standalone Malayalam Panchangam (Hindu calendar) web application with accurate astronomical calculations based on NASA/Moshier ephemeris algorithms. No external astronomical APIs or heavy calendar libraries required — all calculations are done in pure JavaScript.
 
 **Default Location:** Kerala, India (11.07°N, 76.28°E)
+
+---
+
+## Screenshots
+
+![Daily Panchangam View](Screenshot_1.jpg)
+
+![Monthly Calendar View](Screenshot_2.jpg)
+
+![Tools View](Screenshot_3.jpg)
 
 ---
 
@@ -31,6 +39,11 @@ A fully standalone Malayalam Panchangam (Hindu calendar) web application with ac
 - Click any day to navigate to detailed daily view
 - Month navigation (previous/next)
 
+### Tools (ഉപകരണങ്ങൾ)
+- **Nakshathram Date Finder** — Find 1–12 upcoming dates for any of the 27 nakshatras, with Gregorian and Kollavarsham dates
+- **Kollavarsham to Gregorian Converter** — Convert any Kollavarsham date (year, month, day) to Gregorian date
+- **Upcoming Events Search** — Browse upcoming 5/10/20 special days and festivals with optional Malayalam search filter
+
 ### Visheshadivasangal (Special Days & Festivals)
 
 **Major Kerala Festivals:**
@@ -45,7 +58,7 @@ A fully standalone Malayalam Panchangam (Hindu calendar) web application with ac
 **Other Festivals:**
 - Vinayaka Chaturthi (വിനായക ചതുർത്ഥി)
 - Ashtami Rohini / Krishna Jayanthi (അഷ്ടമിരോഹിണി)
-- Makara Sankranti (മകരസംക്രാന്തി) & Makaravilakku (മകരവിളക്ക്)
+- Makara Sankranti (മകಠസംക്രാന്തി) & Makaravilakku (മകരവിളക്ക്)
 - Karkidaka Vavu (കർക്കടക വാവ്)
 - Mandala Pooja (മണ്ഡലപൂജ) & Mandala Kaalam
 - Thaipooyam (തൈപ്പൂയം)
@@ -109,6 +122,7 @@ The day's nakshathram is determined by checking the Moon's position at **sunrise
 
 ```
 Ml-panchangam/
+├── index.js                     # npm entry point
 ├── server.js                    # Express API server
 ├── src/
 │   ├── panchang-engine.js       # Astronomical calculation engine
@@ -118,7 +132,7 @@ Ml-panchangam/
 │   ├── css/
 │   │   └── style.css            # Kerala temple themed styles
 │   └── js/
-│       └── app.js               # Frontend logic (daily + calendar views)
+│       └── app.js               # Frontend logic (daily + calendar + tools views)
 ├── package.json
 └── README.md
 ```
@@ -176,28 +190,73 @@ Returns lightweight panchangam data for all days in a month (used by the calenda
 | `lat` | 11.0745 | Latitude |
 | `lng` | 76.2824 | Longitude |
 
+### `GET /api/tools/nakshatras`
+
+Returns the list of all 27 nakshatras (Malayalam names).
+
+### `GET /api/tools/next-nakshatra`
+
+Find upcoming dates for a specific nakshathram.
+
+**Query Parameters:**
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `name` | *(required)* | Nakshathram name in Malayalam (e.g., `അശ്വതി`) |
+| `count` | 1 | Number of upcoming dates to find (1–12) |
+| `lat` | 11.0745 | Latitude |
+| `lng` | 76.2824 | Longitude |
+
+**Response:**
+```json
+[
+  {
+    "date": "2026-03-15",
+    "weekday": { "en": "Sunday", "ml": "ഞായർ" },
+    "kollavarsham": { "year": 1201, "month": "Kumbham", "monthMl": "കുംഭം", "day": 31 },
+    "nakshathram": { "en": "Ashwathi", "ml": "അശ്വതി" }
+  }
+]
+```
+
+### `GET /api/tools/kv-to-gregorian`
+
+Convert a Kollavarsham date to Gregorian.
+
+**Query Parameters:**
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `year` | *(required)* | Kollavarsham year (e.g., `1201`) |
+| `month` | *(required)* | Malayalam month name (e.g., `കുംഭം`) |
+| `day` | *(required)* | Day of month |
+
 **Response:**
 ```json
 {
-  "year": 2026,
-  "month": 3,
-  "days": [
-    {
-      "date": "2026-03-01",
-      "day": 1,
-      "gregorianDay": "Sunday",
-      "weekdayMl": "ഞായർ",
-      "kvMonth": "Kumbham",
-      "kvMonthMl": "കുംഭം",
-      "kvDay": 17,
-      "kvYear": 1201,
-      "nakshathram": "Aayilyam",
-      "nakshathramMl": "ആയില്യം",
-      "isNakshatramLess": false,
-      "vishesham": ["നാഗപൂജ", "പ്രദോഷം"]
-    }
-  ]
+  "gregorianDate": "2026-02-13",
+  "weekday": { "en": "Friday", "ml": "വെള്ളി" }
 }
+```
+
+### `GET /api/tools/upcoming-events`
+
+Find upcoming special days and festivals.
+
+**Query Parameters:**
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `count` | 5 | Number of events (5, 10, or 20) |
+| `search` | *(empty)* | Optional Malayalam search filter (e.g., `വിഷു`) |
+
+**Response:**
+```json
+[
+  {
+    "date": "2026-03-10",
+    "weekday": { "en": "Tuesday", "ml": "ചൊവ്വ" },
+    "kollavarsham": { "year": 1201, "month": "Kumbham", "monthMl": "കുംഭം", "day": 26 },
+    "event": "ഏകാദശി"
+  }
+]
 ```
 
 ---
@@ -215,6 +274,24 @@ npm start
 # http://localhost:3000
 ```
 
+### As an npm package
+
+```bash
+npm install ml-panchangam
+```
+
+```javascript
+const { Panchang, getPanchangam } = require('ml-panchangam');
+
+// Get full panchangam for a date
+const data = getPanchangam('2026-03-01');
+console.log(data);
+
+// Use the engine directly
+const panchang = new Panchang();
+const result = panchang.calculate(new Date(), { lat: 11.07, lon: 76.28 });
+```
+
 ### Dependencies
 
 Only two runtime dependencies:
@@ -230,8 +307,18 @@ All astronomical calculations are handled by the built-in engine with **zero ext
 - **Mobile responsive** — optimized for phones with proper touch targets (44px minimum)
 - **Daily View** — summary card, sunrise/sunset, all panchangam elements in card grid
 - **Monthly Calendar** — 7-column grid, click-to-navigate, special day tags
+- **Tools View** — nakshathram finder, kollavarsham converter, upcoming events search
 - **Date Navigation** — date picker, previous/next day buttons, today button
 - **Kerala Temple Aesthetic** — gold (#D4A017), maroon (#800020), dark green (#1B5E20) color scheme
+
+---
+
+## Author
+
+**Babu Perumana**
+- Email: babuperumana@gmail.com
+- WhatsApp: +91 8907959595
+- GitHub: [Babuperumana](https://github.com/Babuperumana)
 
 ---
 
