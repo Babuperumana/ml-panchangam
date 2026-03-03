@@ -10,6 +10,12 @@ function formatDate(d) {
   return d.toISOString().split('T')[0];
 }
 
+const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function displayDate(isoStr) {
+  const [y, m, d] = isoStr.split('-');
+  return `${d}/${MONTH_ABBR[parseInt(m) - 1]}/${y}`;
+}
+
 let currentDate = new Date();
 let currentView = 'daily'; // 'daily' | 'calendar' | 'tools'
 let calYear = currentDate.getFullYear();
@@ -39,7 +45,7 @@ function renderPanchangam(d) {
   content.innerHTML = `
     <!-- Summary Card -->
     <div class="summary-card">
-      <div class="gregorian-date">${d.gregorian.date} &bull; ${d.gregorian.day}</div>
+      <div class="gregorian-date">${displayDate(d.gregorian.date)} &bull; ${d.gregorian.day}</div>
       <div class="ml-day">${d.weekday.ml}</div>
       <div class="kv-date">
         ${d.kollavarsham.monthMl} ${d.kollavarsham.day}, ${d.kollavarsham.year}
@@ -426,7 +432,7 @@ async function searchNakshatra() {
         <tbody>
           ${data.map((d, i) => `<tr>
             <td>${i + 1}</td>
-            <td>${d.date}</td>
+            <td>${displayDate(d.date)}</td>
             <td>${d.weekday.ml} / ${d.weekday.en}</td>
             <td>${d.kollavarsham.monthMl} ${d.kollavarsham.day}, ${d.kollavarsham.year}</td>
           </tr>`).join('')}
@@ -451,7 +457,7 @@ async function convertKvDate() {
     resultDiv.innerHTML = `
       <div class="tool-converted">
         <div class="tool-converted-label">ഗ്രിഗോറിയൻ തീയതി / Gregorian Date</div>
-        <div class="tool-converted-value">${data.gregorianDate}</div>
+        <div class="tool-converted-value">${displayDate(data.gregorianDate)}</div>
         <div class="tool-converted-day">${data.weekday.ml} / ${data.weekday.en}</div>
       </div>`;
   } catch (err) {
@@ -483,7 +489,7 @@ async function searchEvents() {
         </tr></thead>
         <tbody>
           ${data.map(d => `<tr>
-            <td>${d.date}</td>
+            <td>${displayDate(d.date)}</td>
             <td>${d.weekday.ml}</td>
             <td class="tool-event-name">${d.event}</td>
             <td>${d.kollavarsham.monthMl} ${d.kollavarsham.day}</td>
