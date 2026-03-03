@@ -180,11 +180,11 @@ function convertKvToGregorian(year, monthStr, day) {
   const result = panchang.kollamToGregorian(year, monthStr, day);
   if (!result) return null;
   const dateStr = result.toISOString().split('T')[0];
-  const d = new Date(dateStr + 'T12:00:00');
-  const dayNameEn = WEEKDAY_NAMES[d.getDay()];
+  const p = getPanchangam(dateStr);
   return {
     gregorianDate: dateStr,
-    weekday: { en: dayNameEn, ml: WEEKDAY_ML[dayNameEn] }
+    weekday: p.weekday,
+    nakshathram: p.nakshathram
   };
 }
 

@@ -459,6 +459,7 @@ async function convertKvDate() {
         <div class="tool-converted-label">ഗ്രിഗോറിയൻ തീയതി / Gregorian Date</div>
         <div class="tool-converted-value">${displayDate(data.gregorianDate)}</div>
         <div class="tool-converted-day">${data.weekday.ml} / ${data.weekday.en}</div>
+        <div class="tool-converted-day">⭐ ${data.nakshathram.ml} / ${data.nakshathram.en}</div>
       </div>`;
   } catch (err) {
     resultDiv.innerHTML = `<div class="tool-error">പിശക്: ${err.message}</div>`;
