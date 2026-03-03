@@ -240,9 +240,9 @@ function renderCalendar(data) {
   content.innerHTML = `
     <div class="calendar-container">
       <div class="calendar-header">
-        <button class="cal-nav-btn" onclick="changeMonth(-1)">◀ മുൻപ്</button>
+        <button class="cal-nav-btn" onclick="changeMonth(-1)">◀ മുൻപത്തെ</button>
         <h2>${MONTH_NAMES_ML[month]} ${year} / ${MONTH_NAMES[month]} ${year}</h2>
-        <button class="cal-nav-btn" onclick="changeMonth(1)">പിന്നീട് ▶</button>
+        <button class="cal-nav-btn" onclick="changeMonth(1)">അടുത്ത ▶</button>
       </div>
       <div class="back-to-daily">
         <button onclick="switchToDailyView()">← ദിവസ വിവരങ്ങൾ / Daily View</button>
